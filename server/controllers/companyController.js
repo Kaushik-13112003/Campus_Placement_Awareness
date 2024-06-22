@@ -118,6 +118,32 @@ const getSingleCompanyController = async (req, res) => {
   }
 };
 
+//sort compnay
+const sortCompanyController = async (req, res) => {
+  try {
+    let { department } = req.query;
+    let decodedDepartment = decodeURIComponent(department);
+    console.log(decodedDepartment);
+
+    let allCompanies;
+
+    if (decodedDepartment === "All") {
+      allCompanies = await companyModel.find();
+      return res.status(200).json({ allCompanies: allCompanies });
+    }
+
+    allCompanies = await companyModel.find({ department: decodedDepartment });
+
+    if (allCompanies) {
+      return res.status(200).json({ allCompanies: allCompanies });
+    } else {
+      return res.status(400).json({ message: "company not found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 const updateCompanyController = async (req, res) => {
   const { id } = req.params;
   let {
@@ -190,4 +216,5 @@ module.exports = {
   getAllCompanyByAdminController,
   updateCompanyController,
   deleteSingleCompanyController,
+  sortCompanyController,
 };
