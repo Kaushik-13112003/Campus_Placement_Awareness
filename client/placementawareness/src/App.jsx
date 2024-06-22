@@ -9,11 +9,16 @@ import { Toaster } from "react-hot-toast";
 import Register from "./componenet/Register";
 import Login from "./componenet/Login";
 import Home from "./componenet/Home";
-import Departments from "./componenet/Departments";
 import Profile from "./componenet/Profile";
 import UpdateProfile from "./componenet/UpdateProfile";
 import SingleEvent from "./componenet/SingleEvents";
 import Events from "./componenet/Events";
+import Companies from "./componenet/Companies";
+import CreateCompany from "./componenet/CreateCompany";
+import MyCompanies from "./componenet/MyCompanies";
+import Internships from "./componenet/Internships";
+import EditCompany from "./componenet/EditCompany";
+import SingleCompany from "./componenet/SingleCompany";
 
 const App = () => {
   return (
@@ -24,11 +29,16 @@ const App = () => {
       <Routes>
         <Route path="/" element={<PrivateAuth />}>
           <Route path="/" element={<Home />}></Route>
-          <Route path="/departments" element={<Departments />}></Route>
+          <Route path="/companies" element={<Companies />}></Route>
+          <Route path="/edit-company/:id" element={<EditCompany />}></Route>
+          <Route path="/mycompanies" element={<MyCompanies />}></Route>
+          <Route path="/internships" element={<Internships />}></Route>
+          <Route path="/create-company" element={<CreateCompany />}></Route>
           <Route path="/profile/:id" element={<Profile />}></Route>
           <Route path="/profile-update/:id" element={<UpdateProfile />}></Route>
           <Route path="/events" element={<Events />}></Route>
           <Route path="/single-event/:id" element={<SingleEvent />}></Route>
+          <Route path="/single-company/:id" element={<SingleCompany />}></Route>
         </Route>
 
         <Route path="/register" element={<Register />}></Route>

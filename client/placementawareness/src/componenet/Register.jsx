@@ -105,7 +105,7 @@ const Register = () => {
   // console.log(role);
   return (
     <>
-      <div className=" bg-green-50 p-3">
+      <div className=" bg-green-300 p-3">
         <h1 className="text-primary text-2xl text-center p-5">Register</h1>
 
         <div className="flex  items-center justify-center p-7">

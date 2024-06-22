@@ -33,7 +33,7 @@ function Events() {
   return (
     <>
       <Navbar />
-      <div className="min-h-screen bg-green-100 p-8">
+      <div className="min-h-screen bg-green-200 p-8">
         <h1 className="text-3xl font-bold mb-8 text-center border-b-2 border-green-400 py-4">
           Upcoming Events
         </h1>

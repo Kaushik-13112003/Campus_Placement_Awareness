@@ -41,22 +41,40 @@ const Navbar = () => {
             </NavLink>
 
             <NavLink
-              to={"/departments"}
+              to={`/`}
               className="hover:text-green-500"
               style={{ textDecoration: "none" }}
             >
-              Departments
+              Home
+            </NavLink>
+
+            <NavLink
+              to={"/companies"}
+              className="hover:text-green-500"
+              style={{ textDecoration: "none" }}
+            >
+              Companies
             </NavLink>
 
             {userData.role === "Admin" && (
-              <NavLink
-                to={"/create-company"}
-                className="hover:text-green-500"
-                style={{ textDecoration: "none" }}
-              >
-                Companies
-              </NavLink>
+              <>
+                <NavLink
+                  to={"/mycompanies"}
+                  className="hover:text-green-500"
+                  style={{ textDecoration: "none" }}
+                >
+                  My Company
+                </NavLink>
+              </>
             )}
+
+            <NavLink
+              to={"/internships"}
+              className="hover:text-green-500"
+              style={{ textDecoration: "none" }}
+            >
+              Internships
+            </NavLink>
 
             <NavLink
               to={"/events"}
@@ -100,24 +118,43 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                  to={"/departments"}
+                  onClick={toggleFunction}
+                  to={`/`}
+                  className="hover:text-green-500"
+                  style={{ textDecoration: "none" }}
+                >
+                  Home{" "}
+                </NavLink>
+
+                <NavLink
+                  onClick={toggleFunction}
+                  to={"/companies"}
+                  className="hover:text-green-500 hover:bg-green-100 w-[100%] text-center rounded-sm p-1"
+                  style={{ textDecoration: "none" }}
+                >
+                  Companies
+                </NavLink>
+                {userData.role === "Admin" && (
+                  <>
+                    <NavLink
+                      onClick={toggleFunction}
+                      to={"/mycompanies"}
+                      className="hover:text-green-500 hover:bg-green-100 w-[100%] text-center rounded-sm p-1"
+                      style={{ textDecoration: "none" }}
+                    >
+                      My Companies
+                    </NavLink>
+                  </>
+                )}
+
+                <NavLink
+                  to={"/internships"}
                   onClick={toggleFunction}
                   className="hover:text-green-500 hover:bg-green-100 w-[100%] text-center rounded-sm p-1"
                   style={{ textDecoration: "none" }}
                 >
-                  Departments
+                  Internships
                 </NavLink>
-
-                {userData.role === "Admin" && (
-                  <NavLink
-                    onClick={toggleFunction}
-                    to={"/create-company"}
-                    className="hover:text-green-500 hover:bg-green-100 w-[100%] text-center rounded-sm p-1"
-                    style={{ textDecoration: "none" }}
-                  >
-                    Companies
-                  </NavLink>
-                )}
 
                 <NavLink
                   onClick={toggleFunction}
