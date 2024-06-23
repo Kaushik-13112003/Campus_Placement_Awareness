@@ -3,13 +3,18 @@ import Navbar from "./Navbar";
 import useUserData from "./useUserData";
 import { FaUserEdit } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { useGlobalContext } from "../context/userContext";
+import useAlumniData from "../Alumni/userAlumniData";
 
 const Profile = () => {
   let { userData } = useUserData();
+  let { alumniData } = useAlumniData();
+  const { auth } = useGlobalContext();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <>
       <Navbar />
@@ -18,7 +23,7 @@ const Profile = () => {
         <div className="bg-green-300  p-6 rounded-md flex items-center  justify-between w-[50%] sm:flex-row flex-col gap-5 ">
           <img
             src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
-              userData?.photo
+              auth?.role === "Alumni" ? alumniData?.photo : userData?.photo
             }`}
             alt={userData?.name}
             className="sm:w-[200px] w-[100%] rounded-full"

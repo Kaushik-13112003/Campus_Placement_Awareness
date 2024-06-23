@@ -9,72 +9,50 @@ const schemaDesign = new mongoose.Schema(
       lowercase: true,
     },
 
-    type: {
+    email: {
+      type: String,
+      require: true,
+      unique: true,
+    },
+
+    password: {
       type: String,
       require: true,
     },
 
-    department: {
+    photo: {
+      type: String,
+    },
+
+    role: {
       type: String,
       require: true,
     },
 
-    about: {
+    linkedInUrl: {
       type: String,
       require: true,
     },
 
-    address: {
+    currentCompany: {
       type: String,
       require: true,
     },
 
-    state: {
+    currentRole: {
       type: String,
       require: true,
     },
 
-    photos: {
-      type: [String],
-    },
-
-    country: {
+    whatsAppNumber: {
       type: String,
       require: true,
     },
-
-    postalCode: {
-      type: String,
-      require: true,
-    },
-
-    city: {
-      type: String,
-      require: true,
-    },
-
-    properties: [
-      {
-        type: Object,
-      },
-    ],
-
-    admin: {
-      type: mongoose.Types.ObjectId,
-      ref: "userData",
-    },
-
-    alumni: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "userData",
-      },
-    ],
   },
   {
     timestamps: true,
   }
 );
 
-const companyModel = mongoose.model("companyData", schemaDesign);
-module.exports = companyModel;
+const alumniModel = mongoose.model("alumniData", schemaDesign);
+module.exports = alumniModel;

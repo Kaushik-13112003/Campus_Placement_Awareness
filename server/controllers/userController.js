@@ -22,7 +22,17 @@ const uploadPhotoController = async (req, res) => {
 
 const registerController = async (req, res) => {
   try {
-    let { name, email, password, role, photo } = req.body;
+    let {
+      name,
+      email,
+      password,
+      role,
+      photo,
+      whatsAppNumber,
+      currentCompany,
+      currentRole,
+      linkedInUrl,
+    } = req.body;
 
     //isExist
     const isExist = await userModel.findOne({ email: email });
@@ -31,20 +41,38 @@ const registerController = async (req, res) => {
       return res.status(400).json({ message: "E-Mail already Exists" });
     } else {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const phoneRegex = /^\d{10}$/;
 
       if (email) {
         if (!emailRegex.test(email)) {
           return res.status(400).json({ message: "Invalid E-Mail Format" });
         } else {
+          if (!phoneRegex.test(whatsAppNumber)) {
+            return res.status(400).json({ message: "Invalid Mobile " });
+          }
           password = await hashPasswordFunc(password);
-
-          const newUser = new userModel({
-            name,
-            email,
-            password,
-            role,
-            photo,
-          });
+          let newUser;
+          if (role === "Alumni") {
+            newUser = new userModel({
+              name,
+              email,
+              password,
+              role,
+              photo,
+              whatsAppNumber,
+              currentCompany,
+              currentRole,
+              linkedInUrl,
+            });
+          } else {
+            newUser = new userModel({
+              name,
+              email,
+              password,
+              role,
+              photo,
+            });
+          }
 
           await newUser.save();
           return res.status(200).json({ message: " Regisered Successfully" });
@@ -121,13 +149,22 @@ const getSingleUserController = async (req, res) => {
 const updateUserController = async (req, res) => {
   try {
     const { id } = req.params;
-    let { photo, name } = req.body;
-
-    const updateUser = await userModel.findByIdAndUpdate(
-      { _id: id },
-      { photo, name },
-      { new: true }
-    );
+    let { photo, name, currentCompany, currentRole, linkedInUrl, role } =
+      req.body;
+    let updateUser;
+    if (role === "Alumni") {
+      updateUser = await userModel.findByIdAndUpdate(
+        { _id: id },
+        { photo, name, currentCompany, currentRole, linkedInUrl },
+        { new: true }
+      );
+    } else {
+      updateUser = await userModel.findByIdAndUpdate(
+        { _id: id },
+        { photo, name },
+        { new: true }
+      );
+    }
 
     await updateUser.save();
     return res

@@ -16,6 +16,7 @@ app.use(morgan("dev"));
 require("./db/db");
 app.use(require("./routes/userRoutes"));
 app.use(require("./routes/companyRoutes"));
+app.use(require("./routes/alumniRoutes"));
 app.use("/uploads", express.static(__dirname + "/uploads"));
 
 app.listen(port, () => {

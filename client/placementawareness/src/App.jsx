@@ -19,6 +19,8 @@ import MyCompanies from "./componenet/MyCompanies";
 import Internships from "./componenet/Internships";
 import EditCompany from "./componenet/EditCompany";
 import SingleCompany from "./componenet/SingleCompany";
+import AlumniRegister from "./Alumni/AlumniRegister";
+import AlumniLogin from "./Alumni/AlumniLogin";
 
 const App = () => {
   return (
@@ -42,7 +44,9 @@ const App = () => {
         </Route>
 
         <Route path="/register" element={<Register />}></Route>
+        <Route path="/alumni-register" element={<AlumniRegister />}></Route>
         <Route path="/login" element={<Login />}></Route>
+        <Route path="/alumni-login" element={<AlumniLogin />}></Route>
       </Routes>
     </>
   );

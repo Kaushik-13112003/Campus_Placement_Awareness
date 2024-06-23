@@ -2,9 +2,13 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { MdLocationPin } from "react-icons/md";
 import { useParams, NavLink } from "react-router-dom";
+import { CgMail, CgPhone } from "react-icons/cg";
+import { FaLinkedin } from "react-icons/fa";
 
 const SingleCompany = () => {
   const [singleCompanyData, setSingleCompanyData] = useState("");
+  const [alumniResult, setAlumniResults] = useState([]);
+
   const { id } = useParams();
 
   //   getSingleCompany
@@ -25,6 +29,7 @@ const SingleCompany = () => {
 
       if (res.ok) {
         setSingleCompanyData(dataFromResponse?.singleCompany);
+        setAlumniResults(dataFromResponse?.findAlumnies);
       }
     } catch (err) {
       console.log(err);
@@ -49,7 +54,7 @@ const SingleCompany = () => {
         </div>
       </div>
 
-      <div className="flex items-center  justify-center mt-5 ">
+      <div className="flex   w-[90vw] mx-auto mt-5 ">
         <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-4 grid-cols-1  grid-flow-dense">
           {singleCompanyData?.photos?.map((ele, idx) => {
             return (
@@ -123,6 +128,55 @@ const SingleCompany = () => {
             {singleCompanyData?.state},{singleCompanyData?.country}
           </p>
         </div>
+
+        <h1 className="p-2 my-5 text-center  text-2xl">Alumni</h1>
+        {alumniResult.map((alumni, idx) => (
+          <div
+            key={idx}
+            className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-400 rounded-lg p-4"
+          >
+            <div className="flex gap-2 items-center">
+              <img
+                src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                  alumni?.photo
+                }`}
+                alt=""
+                className="w-[100px] rounded-full"
+              />
+              <span>{alumni?.name}</span>
+            </div>
+
+            <div className=" flex flex-col gap-2">
+              <a
+                target="_blank"
+                className="hover:text-white flex gap-2 items-center"
+                href={`mailto:${alumni?.email}`}
+              >
+                <CgMail size={20} />
+                <span>{alumni?.email}</span>
+              </a>
+              <a
+                target="_blank"
+                className="hover:text-white flex gap-2 items-center"
+                href={`tel:${alumni?.whatsAppNumber}`}
+              >
+                <CgPhone size={20} />
+                <span>{alumni?.whatsAppNumber}</span>
+              </a>
+              <a
+                target="_blank"
+                className="hover:text-white flex gap-2 items-center"
+                href={alumni?.linkedInUrl}
+              >
+                <FaLinkedin size={20} />
+                <span>{alumni?.linkedInUrl}</span>
+              </a>
+              <button className="bg-green-300 hover:bg-green-200 p-2 rounded-md">
+                Chat Now
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </>
   );

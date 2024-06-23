@@ -21,12 +21,17 @@ const EditCompany = () => {
   const [country, setCountry] = useState("");
   const [photos, setPhotos] = useState([]);
   const [properties, setProperties] = useState([]);
+  const [alumniData, setAlumniData] = useState([]);
+  const [alumniResult, setAlumniResults] = useState([]);
   const [department, setDepartment] = useState("");
   const [departmentData, setDepartmentData] = useState([
     "Information & Technology",
     "Computer Engineering",
     "Mechanical Engineering",
   ]);
+  const [alumniSearchQuery, setAlumniSearchQuery] = useState("");
+  const [alumniSearchResults, setAlumniSearchResults] = useState([]);
+  const [selectedAlumni, setSelectedAlumni] = useState([]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -199,10 +204,71 @@ const EditCompany = () => {
         setAddress(dataFromResponse?.singleCompany?.address);
         setPhotos(dataFromResponse?.singleCompany?.photos);
         setDepartment(dataFromResponse?.singleCompany?.department);
+        setAlumniResults(dataFromResponse?.findAlumnies);
       }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const handleAlumniSearch = async () => {
+    try {
+      const res = await fetch(
+        `${
+          import.meta.env.VITE_BACKEND_URL
+        }/search-alumni?query=${alumniSearchQuery}`,
+        {
+          headers: {
+            Authorization: auth?.token,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const dataFromResponse = await res.json();
+      console.log(dataFromResponse);
+      if (dataFromResponse?.length > 0) {
+        setAlumniSearchResults(dataFromResponse);
+        setAlumniSearchQuery("");
+      } else {
+        toast.error("alumni not found");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAddAlumni = async (alumniId) => {
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/add-alumni/${id}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: auth?.token,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ alumniId }),
+        }
+      );
+
+      const dataFromResponse = await res.json();
+      if (res.ok) {
+        setSelectedAlumni((prev) => [...prev, dataFromResponse]);
+        toast.success("Alumni added successfully");
+      } else {
+        toast.error(dataFromResponse?.msg);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const removeAlumni = (id) => {
+    let filter = alumniSearchResults.filter((ele) => {
+      return ele?._id !== id;
+    });
+    setAlumniSearchResults(filter);
   };
 
   useEffect(() => {
@@ -451,6 +517,98 @@ const EditCompany = () => {
                   );
                 })}
               </>
+            )}
+            <h1 className="p-2 my-5 text-center  text-2xl">Alumni</h1>
+            {alumniResult.map((alumni, idx) => (
+              <div
+                key={idx}
+                className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-200 rounded-lg p-4"
+              >
+                <div className="flex gap-2 items-center">
+                  <img
+                    src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                      alumni?.photo
+                    }`}
+                    alt=""
+                    className="w-[100px] rounded-full"
+                  />
+                  <span>{alumni?.name}</span>
+                </div>
+
+                <div className="flex gap-3 ">
+                  <button
+                    type="button"
+                    onClick={() => handleAddAlumni(alumni._id)}
+                    className="bg-green-300 hover:bg-green-100 w-[100px] p-2 rounded-lg"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeAlumni(alumni._id)}
+                    className="bg-red-300 w-[100px] hover:bg-red-100 p-2 rounded-lg"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            ))}
+            <div className="flex flex-col gap-3 p-2 -mt-4">
+              <label htmlFor="alumniSearch">Add Alumni</label>
+              <input
+                type="text"
+                name="alumniSearch"
+                placeholder="Search by name or email"
+                className="bg-green-200 rounded-lg p-2"
+                value={alumniSearchQuery}
+                onChange={(e) => setAlumniSearchQuery(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={handleAlumniSearch}
+                className="bg-green-300 hover:bg-green-200 p-2 rounded-lg mt-2"
+              >
+                Search Alumni
+              </button>
+            </div>
+            {/* alumni if found */}
+            {alumniSearchResults?.length > 0 && (
+              <div className="flex flex-col gap-3 p-2 -mt-4">
+                {alumniSearchResults.map((alumni, idx) => (
+                  <div
+                    key={idx}
+                    className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-200 rounded-lg p-4"
+                  >
+                    <div className="flex gap-2 items-center">
+                      <img
+                        src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                          alumni?.photo
+                        }`}
+                        alt=""
+                        className="w-[100px] rounded-full"
+                      />
+                      <span>{alumni?.name}</span>
+                    </div>
+
+                    <div className="flex gap-3 ">
+                      <button
+                        type="button"
+                        onClick={() => handleAddAlumni(alumni._id)}
+                        className="bg-green-300 hover:bg-green-100 w-[100px] p-2 rounded-lg"
+                      >
+                        Add
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removeAlumni(alumni._id)}
+                        className="bg-red-300 w-[100px] hover:bg-red-100 p-2 rounded-lg"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
             <button
               className="bg-green-200 p-2 w-[100%] mb-5  rounded-md hover:bg-green-50"

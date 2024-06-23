@@ -11,6 +11,8 @@ const {
   updateCompanyController,
   deleteSingleCompanyController,
   sortCompanyController,
+  addAlumniToCompanyController,
+  searchAlumniController,
 } = require("../controllers/companyController");
 
 const photoMiddleware = multer({ dest: "uploads/" });
@@ -35,6 +37,15 @@ router.get("/sort-companies", sortCompanyController);
 router.get("/get-single-company/:id", getSingleCompanyController);
 
 router.get("/single-admin-company/:id", getAllCompanyByAdminController);
+
+router.post(
+  "/add-alumni/:id",
+  authController,
+  adminAuth,
+  addAlumniToCompanyController
+);
+
+router.get("/search-alumni", searchAlumniController);
 
 router.put(
   "/update-company/:id",

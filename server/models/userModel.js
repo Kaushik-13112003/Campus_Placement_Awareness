@@ -28,6 +28,26 @@ const schemaDesign = new mongoose.Schema(
       type: String,
       require: true,
     },
+
+    linkedInUrl: {
+      type: String,
+      require: true,
+    },
+
+    currentCompany: {
+      type: String,
+      require: true,
+    },
+
+    currentRole: {
+      type: String,
+      require: true,
+    },
+
+    whatsAppNumber: {
+      type: String,
+      require: true,
+    },
   },
   {
     timestamps: true,

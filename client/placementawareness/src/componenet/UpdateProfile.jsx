@@ -16,13 +16,37 @@ const UpdateProfile = () => {
   const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [photo, setPhoto] = useState("");
+  const [whatsAppNumber, setwhatsAppNumber] = useState("");
+  const [linkedInUrl, setlinkedInUrl] = useState("");
+  const [currentCompany, setCurrentCompany] = useState("");
+  const [currentRole, setCurrentRole] = useState("");
 
   const handleChange = async (event) => {
     event.preventDefault();
 
-    if (name === "" || photo === "") {
-      toast.error("complete the fields");
-      return;
+    if (userData?.role === "Alumni") {
+      if (
+        name === "" ||
+        photo === "" ||
+        currentCompany === "" ||
+        currentRole === "" ||
+        linkedInUrl === ""
+      ) {
+        toast.error("complete the fields");
+        return;
+      }
+    } else {
+      if (name === "" || photo === "") {
+        toast.error("complete the fields");
+        return;
+      }
+    }
+
+    let data;
+    if (userData?.role === "Alumni") {
+      data = { currentCompany, name, currentRole, photo, linkedInUrl };
+    } else {
+      data = { name, photo };
     }
 
     try {
@@ -37,8 +61,7 @@ const UpdateProfile = () => {
           },
 
           body: JSON.stringify({
-            name,
-            photo,
+            ...data,role
           }),
         }
       );
@@ -106,6 +129,12 @@ const UpdateProfile = () => {
       setEmail(userData?.email);
       setRole(userData?.role);
       setPhoto(userData?.photo);
+      if (userData?.role === "Alumni") {
+        setCurrentCompany(userData?.currentCompany);
+        setCurrentRole(userData?.currentRole);
+        setlinkedInUrl(userData?.linkedInUrl);
+        setwhatsAppNumber(userData?.whatsAppNumber);
+      }
     }
   }, [navigate, userData]);
   // console.log(role);
@@ -155,6 +184,16 @@ const UpdateProfile = () => {
                 </div>
               </>
             )}
+            <div className="flex flex-col gap-3 p-2 cursor-pointer">
+              <label htmlFor=" select role">Select role</label>
+
+              <select
+                disabled
+                className="bg-green-200 rounded-lg p-2 cursor-pointer"
+              >
+                <option value={role}>{role}</option>
+              </select>
+            </div>
             <div className="flex flex-col gap-3 p-2 -mt-4">
               <label htmlFor=" name">Name</label>
               <input
@@ -177,16 +216,54 @@ const UpdateProfile = () => {
                 className="bg-green-200 rounded-lg p-2"
               />
             </div>
-            <div className="flex flex-col gap-3 p-2 cursor-pointer">
-              <label htmlFor=" select role">Select role</label>
-
-              <select
-                disabled
-                className="bg-green-200 rounded-lg p-2 cursor-pointer"
-              >
-                <option value={role}>{role}</option>
-              </select>
-            </div>
+            {userData?.role === "Alumni" && (
+              <>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" phone">WhatsApp Number</label>
+                  <input
+                    type="phone"
+                    name="phone"
+                    disabled
+                    placeholder="1936272777"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={whatsAppNumber}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" linkedInUrl">LinkedIn URL</label>
+                  <input
+                    type="linkedInUrl"
+                    name="linkedInUrl"
+                    placeholder="your profile url"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={linkedInUrl}
+                    onChange={(e) => setlinkedInUrl(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" currentCompany">Working Company</label>
+                  <input
+                    type="currentCompany"
+                    name="currentCompany"
+                    placeholder="TCS"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={currentCompany}
+                    onChange={(e) => setCurrentCompany(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" currentRole">Current Role</label>
+                  <input
+                    type="currentRole"
+                    name="currentRole"
+                    placeholder="senior mamager"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={currentRole}
+                    onChange={(e) => setCurrentRole(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
             <button className="bg-green-200 p-2 w-[100%] mb-5  rounded-md hover:bg-green-50">
               Update
             </button>{" "}

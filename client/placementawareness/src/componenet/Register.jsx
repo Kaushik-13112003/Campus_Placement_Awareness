@@ -12,19 +12,59 @@ const Register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [photo, setPhoto] = useState("");
+  const [whatsAppNumber, setwhatsAppNumber] = useState("");
+  const [linkedInUrl, setlinkedInUrl] = useState("");
+  const [currentCompany, setCurrentCompany] = useState("");
+  const [currentRole, setCurrentRole] = useState("");
 
   const handleChange = async (event) => {
     event.preventDefault();
 
-    if (
-      name === "" ||
-      email === "" ||
-      password === "" ||
-      photo === "" ||
-      role === ""
-    ) {
-      toast.error("complete the fields");
-      return;
+    if (role === "Alumni") {
+      if (
+        currentRole === "" ||
+        currentCompany === "" ||
+        linkedInUrl === "" ||
+        whatsAppNumber === "" ||
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        photo === "" ||
+        role === ""
+      ) {
+        toast.error("complete the fields");
+        return;
+      }
+    } else {
+      if (
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        photo === "" ||
+        role === ""
+      ) {
+        toast.error("complete the fields");
+        return;
+      }
+    }
+
+    let checkUser = role === "Alumni";
+    let data;
+
+    if (checkUser) {
+      data = {
+        name,
+        email,
+        password,
+        role,
+        photo,
+        currentRole,
+        currentCompany,
+        linkedInUrl,
+        whatsAppNumber,
+      };
+    } else {
+      data = { name, email, password, role, photo };
     }
 
     try {
@@ -35,19 +75,13 @@ const Register = () => {
           "Content-Type": "application/json",
         },
 
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-          role,
-          photo,
-        }),
+        body: JSON.stringify({...data}),
       });
 
       const dataFromResponse = await res.json();
 
       if (res.ok) {
-        toast.success("user registered");
+        toast.success("user registegreen");
         navigate("/login");
       } else {
         toast.error(dataFromResponse?.message);
@@ -103,6 +137,7 @@ const Register = () => {
     window.scrollTo(0, 0);
   }, [navigate]);
   // console.log(role);
+
   return (
     <>
       <div className=" bg-green-300 p-3">
@@ -140,12 +175,27 @@ const Register = () => {
                       onClick={() => setPhoto("")}
                     >
                       {" "}
-                      <FaTrash className=" text-red-600 hover:text-red-400" />
+                      <FaTrash className=" text-green-600 hover:text-green-400" />
                     </button>
                   </div>{" "}
                 </div>
               </>
             )}
+            <div className="flex flex-col gap-3 p-2 cursor-pointer">
+              <label htmlFor=" select role">Select role</label>
+
+              <select
+                className="bg-green-200 rounded-lg p-2 cursor-pointer"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="">Select </option>
+
+                <option value="Admin">Admin</option>
+                <option value="Student">Student</option>
+                <option value="Alumni">Alumni</option>
+              </select>
+            </div>
             <div className="flex flex-col gap-3 p-2 -mt-4">
               <label htmlFor=" name">Name</label>
               <input
@@ -179,20 +229,54 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex flex-col gap-3 p-2 cursor-pointer">
-              <label htmlFor=" select role">Select role</label>
-
-              <select
-                className="bg-green-200 rounded-lg p-2 cursor-pointer"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="">Select </option>
-
-                <option value="Admin">Admin</option>
-                <option value="Student">Student</option>
-              </select>
-            </div>
+            {role === "Alumni" && (
+              <>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" phone">WhatsApp Number</label>
+                  <input
+                    type="phone"
+                    name="phone"
+                    placeholder="1936272777"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={whatsAppNumber}
+                    onChange={(e) => setwhatsAppNumber(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" linkedInUrl">LinkedIn URL</label>
+                  <input
+                    type="linkedInUrl"
+                    name="linkedInUrl"
+                    placeholder="your profile url"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={linkedInUrl}
+                    onChange={(e) => setlinkedInUrl(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" currentCompany">Working Company</label>
+                  <input
+                    type="currentCompany"
+                    name="currentCompany"
+                    placeholder="TCS"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={currentCompany}
+                    onChange={(e) => setCurrentCompany(e.target.value)}
+                  />
+                </div>
+                <div className="flex flex-col gap-3 p-2 ">
+                  <label htmlFor=" currentRole">Current Role</label>
+                  <input
+                    type="currentRole"
+                    name="currentRole"
+                    placeholder="senior mamager"
+                    className="bg-green-200 rounded-lg p-2"
+                    value={currentRole}
+                    onChange={(e) => setCurrentRole(e.target.value)}
+                  />
+                </div>
+              </>
+            )}
             <button className="bg-green-200 p-2 w-[100%] mb-5  rounded-md hover:bg-green-50">
               Register
             </button>{" "}

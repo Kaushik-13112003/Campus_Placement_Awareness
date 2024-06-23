@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../context/userContext";
 
-const Login = () => {
+const AlumniLogin = () => {
   const navigate = useNavigate("");
   const { setAuth } = useGlobalContext();
   const [email, setEmail] = useState("");
@@ -18,19 +18,22 @@ const Login = () => {
       return;
     }
     try {
-      const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/login`, {
-        method: "POST",
+      const res = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/alumni-login`,
+        {
+          method: "POST",
 
-        headers: {
-          "Content-Type": "application/json",
-        },
+          headers: {
+            "Content-Type": "application/json",
+          },
 
-        body: JSON.stringify({
-          email,
-          password,
-          role,
-        }),
-      });
+          body: JSON.stringify({
+            email,
+            password,
+            role,
+          }),
+        }
+      );
 
       let dataFromResponse = await res.json();
 
@@ -56,26 +59,24 @@ const Login = () => {
   }, [navigate]);
   return (
     <>
-      <div className=" bg-green-300 p-3">
-        <h1 className="text-primary text-2xl text-center p-5">Login</h1>
+      <div className=" bg-red-300 p-3">
+        <h1 className="text-primary text-2xl text-center p-5">Alumni Login</h1>
 
         <div className="flex  items-center justify-center p-7">
           <form
-            className="bg-green-100 rounded-md p-5 md:w-[50%] sm:w-[70%] w-[90%] flex gap-6 flex-col"
+            className="bg-red-100 rounded-md p-5 md:w-[50%] sm:w-[70%] w-[90%] flex gap-6 flex-col"
             onSubmit={handleChange}
           >
             <div className="flex flex-col gap-3 p-2 cursor-pointer">
               <label htmlFor=" select role">Select role</label>
 
               <select
-                className="bg-green-200 rounded-lg p-2 cursor-pointer"
+                className="bg-red-200 rounded-lg p-2 cursor-pointer"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
               >
                 <option value="">Select</option>
 
-                <option value="Admin">Admin</option>
-                <option value="Student">Student</option>
                 <option value="Alumni">Alumni</option>
               </select>
             </div>
@@ -85,7 +86,7 @@ const Login = () => {
                 type="email"
                 name="email"
                 placeholder="john@gmail.com"
-                className="bg-green-200 rounded-lg p-2"
+                className="bg-red-200 rounded-lg p-2"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
@@ -96,13 +97,13 @@ const Login = () => {
                 type="password"
                 name="password"
                 placeholder=" xyz"
-                className="bg-green-200 rounded-lg p-2"
+                className="bg-red-200 rounded-lg p-2"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
-            <button className="bg-green-200 p-2 w-[100%] mb-5 rounded-md hover:bg-green-50">
+            <button className="bg-red-200 p-2 w-[100%] mb-5 rounded-md hover:bg-red-50">
               Login
             </button>
           </form>
@@ -122,4 +123,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default AlumniLogin;

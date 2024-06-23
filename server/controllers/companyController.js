@@ -1,5 +1,6 @@
 const fs = require("fs");
 const companyModel = require("../models/companyModel");
+const userModel = require("../models/userModel");
 
 const uploadCompanyPhotoController = async (req, res) => {
   try {
@@ -108,8 +109,13 @@ const getSingleCompanyController = async (req, res) => {
 
     const singleCompany = await companyModel.findById(id);
 
+    let findAlumnies = await userModel.find({ _id: singleCompany?.alumni });
+    console.log(findAlumnies);
+
     if (singleCompany) {
-      return res.status(200).json({ singleCompany: singleCompany });
+      return res
+        .status(200)
+        .json({ singleCompany: singleCompany, findAlumnies: findAlumnies });
     } else {
       return res.status(400).json({ message: "company not found" });
     }
@@ -208,13 +214,69 @@ const deleteSingleCompanyController = async (req, res) => {
     console.log(err);
   }
 };
+
+//add alumni to compnay
+const addAlumniToCompanyController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { alumniId } = req.body;
+
+    const alumni = await userModel.findById({ _id: alumniId });
+    if (!alumni) {
+      return res.status(404).json({ msg: "Alumni not found" });
+    }
+
+    const company = await companyModel.findById({ _id: id });
+    if (!company) {
+      return res.status(404).json({ msg: "Company not found" });
+    }
+
+    //isExist
+    if (company.alumni.includes(alumniId)) {
+      return res.status(404).json({ msg: "alumni already added" });
+    }
+
+    company.alumni.push(alumni);
+
+    await company.save();
+
+    res.status(200).json(company);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+//search alumni
+const searchAlumniController = async (req, res) => {
+  try {
+    const { query } = req.query;
+    const alumni = await userModel.find({
+      $or: [
+        { username: { $regex: query, $options: "i" } },
+        { email: { $regex: query, $options: "i" } },
+      ],
+      role: "Alumni",
+    });
+
+    if (alumni) {
+      res.status(200).json(alumni);
+    } else {
+      return res.status(404).json({ msg: "alumni not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
 module.exports = {
   uploadCompanyPhotoController,
   createCompanyController,
   getSingleCompanyController,
   getAllCompanyController,
   getAllCompanyByAdminController,
+  searchAlumniController,
   updateCompanyController,
   deleteSingleCompanyController,
   sortCompanyController,
+  addAlumniToCompanyController,
 };
