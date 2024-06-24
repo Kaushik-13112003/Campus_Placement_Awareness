@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { MdLocationPin } from "react-icons/md";
-import { useParams, NavLink } from "react-router-dom";
+import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { CgMail, CgPhone } from "react-icons/cg";
 import { FaLinkedin } from "react-icons/fa";
+// import Chat from "./Chat";
 
 const SingleCompany = () => {
   const [singleCompanyData, setSingleCompanyData] = useState("");
+  const [chatWithAlumniId, setChatWithAlumniId] = useState(null);
   const [alumniResult, setAlumniResults] = useState([]);
+
+  // Inside your SingleCompany component
+  const navigate = useNavigate();
+
+  const openChat = (alumniId) => {
+    navigate(`/chat`);
+  };
 
   const { id } = useParams();
 
@@ -79,7 +88,10 @@ const SingleCompany = () => {
             {singleCompanyData?.properties?.map((ele, idx) => {
               return (
                 <>
-                  <div className="flex bg-green-100 rounded-lg p-3 sm:items-center flex-wrap sm:flex-row flex-col gap-2">
+                  <div
+                    key={idx}
+                    className="flex bg-green-100 rounded-lg p-3 sm:items-center flex-wrap sm:flex-row flex-col gap-2"
+                  >
                     <div className="flex sm:flex-row flex-col gap-4 " key={idx}>
                       <div className="flex flex-col gap-3 p-2 ">
                         <label htmlFor="property name">Job Name</label>
@@ -129,21 +141,25 @@ const SingleCompany = () => {
           </p>
         </div>
 
-        <h1 className="p-2 my-5 text-center  text-2xl">Alumni</h1>
-        {alumniResult.map((alumni, idx) => (
+        {alumniResult?.length > 0 && (
+          <h1 className="p-2 my-5 text-center  text-2xl">Alumni</h1>
+        )}
+        {alumniResult?.map((alumni, idx) => (
           <div
             key={idx}
-            className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-400 rounded-lg p-4"
+            className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-400 mt-6 rounded-lg p-4"
           >
             <div className="flex gap-2 items-center">
-              <img
-                src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
-                  alumni?.photo
-                }`}
-                alt=""
-                className="w-[100px] rounded-full"
-              />
-              <span>{alumni?.name}</span>
+              <div className="flex flex-col gap-2 items-center">
+                <img
+                  src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                    alumni?.photo
+                  }`}
+                  alt=""
+                  className="w-[100px] rounded-full"
+                />
+                <p>{alumni?.name}</p>
+              </div>
             </div>
 
             <div className=" flex flex-col gap-2">
@@ -158,7 +174,8 @@ const SingleCompany = () => {
               <a
                 target="_blank"
                 className="hover:text-white flex gap-2 items-center"
-                href={`tel:${alumni?.whatsAppNumber}`}
+                // href={`tel:${alumni?.whatsAppNumber}`}
+                href={`https://wa.me/${alumni?.whatsAppNumber}`}
               >
                 <CgPhone size={20} />
                 <span>{alumni?.whatsAppNumber}</span>
@@ -171,7 +188,10 @@ const SingleCompany = () => {
                 <FaLinkedin size={20} />
                 <span>{alumni?.linkedInUrl}</span>
               </a>
-              <button className="bg-green-300 hover:bg-green-200 p-2 rounded-md">
+              <button
+                onClick={() => openChat()}
+                className="bg-green-300 hover:bg-green-200 p-2 rounded-md"
+              >
                 Chat Now
               </button>
             </div>

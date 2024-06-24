@@ -110,7 +110,7 @@ const getSingleCompanyController = async (req, res) => {
     const singleCompany = await companyModel.findById(id);
 
     let findAlumnies = await userModel.find({ _id: singleCompany?.alumni });
-    console.log(findAlumnies);
+    // console.log(findAlumnies);
 
     if (singleCompany) {
       return res

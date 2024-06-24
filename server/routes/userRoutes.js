@@ -6,6 +6,7 @@ const {
   getSingleUserController,
   getUserDataController,
   uploadPhotoController,
+  getAllChatsController,
 } = require("../controllers/userController");
 const router = express.Router();
 const { authController } = require("../middleware/auth");
@@ -27,6 +28,8 @@ router.post("/login", loginController);
 router.put("/update-profile/:id", authController, updateUserController);
 
 router.get("/single-user/:id", getSingleUserController);
+
+router.get("/get-all-chats/:id", getAllChatsController);
 
 router.get("/get-single-user", getUserDataController);
 

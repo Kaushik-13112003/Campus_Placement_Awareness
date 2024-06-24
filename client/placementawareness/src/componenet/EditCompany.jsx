@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import { useNavigate, useParams } from "react-router-dom";
-import { FaFileUpload, FaTrash } from "react-icons/fa";
+import { FaFileUpload, FaLinkedin, FaTrash } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 import { ReactSortable } from "react-sortablejs";
 import { useGlobalContext } from "../context/userContext";
+import { CgMail, CgPhone } from "react-icons/cg";
 
 const EditCompany = () => {
   const navigate = useNavigate("");
@@ -212,6 +213,10 @@ const EditCompany = () => {
   };
 
   const handleAlumniSearch = async () => {
+    if (alumniSearchQuery === "") {
+      toast.error("enter something to search");
+      return;
+    }
     try {
       const res = await fetch(
         `${
@@ -226,7 +231,7 @@ const EditCompany = () => {
       );
 
       const dataFromResponse = await res.json();
-      console.log(dataFromResponse);
+      // console.log(dataFromResponse);
       if (dataFromResponse?.length > 0) {
         setAlumniSearchResults(dataFromResponse);
         setAlumniSearchQuery("");
@@ -518,38 +523,53 @@ const EditCompany = () => {
                 })}
               </>
             )}
-            <h1 className="p-2 my-5 text-center  text-2xl">Alumni</h1>
-            {alumniResult.map((alumni, idx) => (
+            {alumniResult?.length > 0 && (
+              <h1 className="p-2 text-center  text-2xl">Alumni</h1>
+            )}
+            {alumniResult?.map((alumni, idx) => (
               <div
                 key={idx}
-                className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-200 rounded-lg p-4"
+                className="flex justify-around sm:flex-row flex-col gap-5 items-center bg-green-400 mt-6 rounded-lg p-4"
               >
                 <div className="flex gap-2 items-center">
-                  <img
-                    src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
-                      alumni?.photo
-                    }`}
-                    alt=""
-                    className="w-[100px] rounded-full"
-                  />
-                  <span>{alumni?.name}</span>
+                  <div className="flex flex-col gap-2 items-center">
+                    <img
+                      src={`${import.meta.env.VITE_BACKEND_URL}/uploads/${
+                        alumni?.photo
+                      }`}
+                      alt=""
+                      className="w-[100px] rounded-full"
+                    />
+                    <p>{alumni?.name}</p>
+                  </div>
                 </div>
 
-                <div className="flex gap-3 ">
-                  <button
-                    type="button"
-                    onClick={() => handleAddAlumni(alumni._id)}
-                    className="bg-green-300 hover:bg-green-100 w-[100px] p-2 rounded-lg"
+                <div className=" flex flex-col gap-2">
+                  <a
+                    target="_blank"
+                    className="hover:text-white flex gap-2 items-center"
+                    href={`mailto:${alumni?.email}`}
                   >
-                    Add
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => removeAlumni(alumni._id)}
-                    className="bg-red-300 w-[100px] hover:bg-red-100 p-2 rounded-lg"
+                    <CgMail size={20} />
+                    <span>{alumni?.email}</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    className="hover:text-white flex gap-2 items-center"
+                    // href={`tel:${alumni?.whatsAppNumber}`}
+                    href={`https://wa.me/${alumni?.whatsAppNumber}`}
                   >
-                    Remove
-                  </button>
+                    <CgPhone size={20} />
+                    <span>{alumni?.whatsAppNumber}</span>
+                  </a>
+                  <a
+                    target="_blank"
+                    className="hover:text-white flex gap-2 items-center"
+                    href={alumni?.linkedInUrl}
+                  >
+                    <FaLinkedin size={20} />
+                    <span>{alumni?.linkedInUrl}</span>
+                  </a>
                 </div>
               </div>
             ))}

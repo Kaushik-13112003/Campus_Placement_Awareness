@@ -21,6 +21,8 @@ import EditCompany from "./componenet/EditCompany";
 import SingleCompany from "./componenet/SingleCompany";
 import AlumniRegister from "./Alumni/AlumniRegister";
 import AlumniLogin from "./Alumni/AlumniLogin";
+import ChatComponent from "./Chats/ChatComponent";
+// import Chat from "./componenet/Chat";
 
 const App = () => {
   return (
@@ -39,6 +41,7 @@ const App = () => {
           <Route path="/profile/:id" element={<Profile />}></Route>
           <Route path="/profile-update/:id" element={<UpdateProfile />}></Route>
           <Route path="/events" element={<Events />}></Route>
+          <Route path="/chat" element={<ChatComponent />}></Route>
           <Route path="/single-event/:id" element={<SingleEvent />}></Route>
           <Route path="/single-company/:id" element={<SingleCompany />}></Route>
         </Route>

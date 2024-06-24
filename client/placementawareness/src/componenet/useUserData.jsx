@@ -26,6 +26,7 @@ const useUserData = () => {
       console.log(err);
     }
   };
+
   useEffect(() => {
     if (auth?.user) {
       getUser();

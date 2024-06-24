@@ -2,6 +2,7 @@ const userModel = require("../models/userModel");
 const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const { hashPasswordFunc, normalPassword } = require("../helper/password");
+const messageModel = require("../models/messageModel");
 
 const uploadPhotoController = async (req, res) => {
   try {
@@ -227,6 +228,28 @@ const getUserDataController = async (req, res) => {
   }
 };
 
+// get-single-user
+const getAllChatsController = async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    if (!id) {
+      return;
+    }
+
+    const allChats = await messageModel.find({ userId: id }).populate("userId alumniId", "name"); // Populate user and alumni data if needed
+    console.log(allChats);
+
+    if (allChats) {
+      return res.status(200).json({ allChats: allChats });
+    } else {
+      return res.status(400).json({ message: "User Not Found" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   registerController,
   loginController,
@@ -236,4 +259,5 @@ module.exports = {
   getSingleUserImageController,
   getUserDataController,
   uploadPhotoController,
+  getAllChatsController,
 };
