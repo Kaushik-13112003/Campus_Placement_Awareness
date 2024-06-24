@@ -104,7 +104,7 @@ const Companies = () => {
           </select>
         </div>
       )}
-      {companyData?.length <= 0 && <p>no companies found </p>}
+      {companyData?.length <= 0 && <p className="text-center mt-6">no companies found </p>}
 
       <CardComponent data={sortCompanies} />
     </>

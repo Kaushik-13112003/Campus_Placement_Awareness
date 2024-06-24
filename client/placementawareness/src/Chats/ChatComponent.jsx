@@ -3,6 +3,7 @@ import { useGlobalContext } from "../context/userContext";
 import Conversation from "./Conversation";
 import ChatBox from "./ChatBox";
 import { io } from "socket.io-client";
+import Navbar from "../componenet/Navbar";
 
 const ChatComponent = () => {
   const { auth } = useGlobalContext();
@@ -76,6 +77,7 @@ const ChatComponent = () => {
 
   return (
     <>
+      <Navbar />
       <div>
         <div>
           {allChats?.length > 0 &&

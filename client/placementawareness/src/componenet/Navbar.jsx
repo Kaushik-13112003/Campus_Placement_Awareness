@@ -68,6 +68,18 @@ const Navbar = () => {
               </>
             )}
 
+            {userData.role !== "Admin" && (
+              <>
+                <NavLink
+                  to={"/chat"}
+                  className="hover:text-green-500"
+                  style={{ textDecoration: "none" }}
+                >
+                  Chats
+                </NavLink>
+              </>
+            )}
+
             <NavLink
               to={"/internships"}
               className="hover:text-green-500"
@@ -143,6 +155,19 @@ const Navbar = () => {
                       style={{ textDecoration: "none" }}
                     >
                       My Companies
+                    </NavLink>
+                  </>
+                )}
+
+                {userData.role !== "Admin" && (
+                  <>
+                    <NavLink
+                      onClick={toggleFunction}
+                      to={"/chat"}
+                      className="hover:text-green-500 hover:bg-green-100 w-[100%] text-center rounded-sm p-1"
+                      style={{ textDecoration: "none" }}
+                    >
+                      Chats
                     </NavLink>
                   </>
                 )}

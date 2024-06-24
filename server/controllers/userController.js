@@ -48,12 +48,12 @@ const registerController = async (req, res) => {
         if (!emailRegex.test(email)) {
           return res.status(400).json({ message: "Invalid E-Mail Format" });
         } else {
-          if (!phoneRegex.test(whatsAppNumber)) {
-            return res.status(400).json({ message: "Invalid Mobile " });
-          }
           password = await hashPasswordFunc(password);
           let newUser;
           if (role === "Alumni") {
+            if (!phoneRegex.test(whatsAppNumber)) {
+              return res.status(400).json({ message: "Invalid Mobile " });
+            }
             newUser = new userModel({
               name,
               email,

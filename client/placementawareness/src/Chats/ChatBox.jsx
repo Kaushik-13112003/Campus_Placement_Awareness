@@ -230,48 +230,54 @@ const ChatBox = ({ currentChat, setRealTimeMessage, receiveRealMessage }) => {
 
   return (
     <>
-      {currentChat ? (
-        <div className="w-[90vw] mx-auto">
-          <div className="bg-green-200 h-screen overflow-auto rounded-lg p-5">
-            {messages.length > 0 &&
-              messages.map((ele, idx) => (
-                <div
-                  key={idx}
-                  ref={scroll}
-                  className={`flex p-2 rounded-md gap-3 ${
-                    ele.senderId === auth?.user
-                      ? "justify-end"
-                      : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`items-end p-2 rounded-md ${
-                      ele.senderId === auth?.user
-                        ? "bg-green-300 text-right"
-                        : "bg-green-400 text-left"
-                    }`}
-                  >
-                    <p>{ele.text}</p>
-                    <p className="text-sm text-gray-600">
-                      {format(ele.createdAt)}
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-
-          <div className="flex items-center fixed-bottom mb-5 mt-5">
-            <p>
-              <FaPlus />
-            </p>
-            <InputEmoji value={newMessage} onChange={handleChange} />
-            <button onClick={handleSendMessage}>
-              <MdSend />
-            </button>
-          </div>
-        </div>
+      {!currentChat ? (
+        <p className="text-center my-5">no chats yet</p>
       ) : (
-        <p className="text-center mt-6">Tap on above to start chat</p>
+        <>
+          {currentChat ? (
+            <div className="w-[90vw] mx-auto">
+              <div className="bg-green-200 h-screen overflow-auto rounded-lg p-5">
+                {messages.length > 0 &&
+                  messages.map((ele, idx) => (
+                    <div
+                      key={idx}
+                      ref={scroll}
+                      className={`flex p-2 rounded-md gap-3 ${
+                        ele.senderId === auth?.user
+                          ? "justify-end"
+                          : "justify-start"
+                      }`}
+                    >
+                      <div
+                        className={`items-end p-2 rounded-md ${
+                          ele.senderId === auth?.user
+                            ? "bg-green-300 text-right"
+                            : "bg-green-400 text-left"
+                        }`}
+                      >
+                        <p>{ele.text}</p>
+                        <p className="text-sm text-gray-600">
+                          {format(ele.createdAt)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+
+              <div className="flex items-center fixed-bottom mb-5 mt-5">
+                <p>
+                  <FaPlus />
+                </p>
+                <InputEmoji value={newMessage} onChange={handleChange} />
+                <button onClick={handleSendMessage}>
+                  <MdSend />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <p className="text-center mt-6">Tap on above to start chat</p>
+          )}
+        </>
       )}
     </>
   );

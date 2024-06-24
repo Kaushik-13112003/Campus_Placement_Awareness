@@ -4,9 +4,12 @@ import { MdLocationPin } from "react-icons/md";
 import { useParams, NavLink, useNavigate } from "react-router-dom";
 import { CgMail, CgPhone } from "react-icons/cg";
 import { FaLinkedin } from "react-icons/fa";
+import { useGlobalContext } from "../context/userContext";
 // import Chat from "./Chat";
 
 const SingleCompany = () => {
+  const { id } = useParams();
+  const { auth } = useGlobalContext();
   const [singleCompanyData, setSingleCompanyData] = useState("");
   const [chatWithAlumniId, setChatWithAlumniId] = useState(null);
   const [alumniResult, setAlumniResults] = useState([]);
@@ -17,8 +20,6 @@ const SingleCompany = () => {
   const openChat = (alumniId) => {
     navigate(`/chat`);
   };
-
-  const { id } = useParams();
 
   //   getSingleCompany
   const getSingleCompany = async () => {
@@ -45,6 +46,28 @@ const SingleCompany = () => {
     }
   };
 
+  //add chat
+  const addChat = async (alumniId) => {
+    try {
+      let res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/create-chat`, {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({ senderId: auth?.user, receiverId: alumniId }),
+      });
+
+      const dataFromResponse = await res.json();
+
+      if (res.ok) {
+        navigate("/chat");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     getSingleCompany();
   }, [id]);
@@ -189,7 +212,8 @@ const SingleCompany = () => {
                 <span>{alumni?.linkedInUrl}</span>
               </a>
               <button
-                onClick={() => openChat()}
+                // onClick={() => openChat()}
+                onClick={() => addChat(alumni?._id)}
                 className="bg-green-300 hover:bg-green-200 p-2 rounded-md"
               >
                 Chat Now
