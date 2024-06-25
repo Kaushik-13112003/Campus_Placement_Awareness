@@ -134,7 +134,7 @@ const sortCompanyController = async (req, res) => {
     let allCompanies;
 
     if (decodedDepartment === "All") {
-      allCompanies = await companyModel.find();
+      allCompanies = await companyModel.find().sort({ createdAt: -1 });
       return res.status(200).json({ allCompanies: allCompanies });
     }
 

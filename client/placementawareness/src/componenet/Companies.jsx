@@ -104,7 +104,28 @@ const Companies = () => {
           </select>
         </div>
       )}
-      {companyData?.length <= 0 && <p className="text-center mt-6">no companies found </p>}
+
+      {userData?.role !== "Admin" && (
+        <div className="mt-6 sm:flex-row flex-col gap-4 flex items-center justify-around">
+          <select
+            className="bg-green-600 text-green-50 rounded-lg p-2 cursor-pointer"
+            value={sortBy}
+            onChange={(e) => handleSort(e.target.value)}
+          >
+            <option value="All">All</option>
+            {departmentData?.map((ele, idx) => {
+              return (
+                <option value={ele} key={idx} className="cursor-pointer">
+                  {ele}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+      )}
+      {companyData?.length <= 0 && (
+        <p className="text-center mt-6">no companies found </p>
+      )}
 
       <CardComponent data={sortCompanies} />
     </>

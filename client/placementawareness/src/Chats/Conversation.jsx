@@ -55,7 +55,7 @@ const Conversation = ({ currentUserId, data, online }) => {
                   alt={userToWhomSendMessage?.name}
                   className="w-[70px] rounded-full "
                 />
-                <p className="">{online ? "Online" : "Ofline"}</p>
+                {/* <p className="">{online ? "Online" : "Ofline"}</p> */}
               </div>
               <p className="text-2xl">{userToWhomSendMessage?.name}</p>
             </div>

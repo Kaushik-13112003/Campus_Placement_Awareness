@@ -40,6 +40,10 @@ const CardComponent = ({ data }) => {
   return (
     <>
       <div className="min-h-screen  p-8">
+        {allCompanies?.length <= 0 && (
+          <p className="text-center mt-6">no companies found </p>
+        )}
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
           {allCompanies?.map((ele, idx) => (
             <>
